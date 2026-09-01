@@ -1,0 +1,24 @@
+api:
+  dashboard: true
+
+log:
+  level: INFO
+
+entryPoints:
+  web:
+    address: ":8080"
+    http:
+      aliasHeadersStrategy: delete
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":8443"
+    http:
+      aliasHeadersStrategy: delete
+
+providers:
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true

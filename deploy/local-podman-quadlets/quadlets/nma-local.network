@@ -1,0 +1,5 @@
+[Network]
+NetworkName=nma-local
+Subnet=10.89.91.0/24
+Gateway=10.89.91.1
+DisableDNS=false

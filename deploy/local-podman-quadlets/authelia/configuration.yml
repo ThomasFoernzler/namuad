@@ -1,0 +1,58 @@
+theme: auto
+
+server:
+  address: tcp://0.0.0.0:9091
+  endpoints:
+    authz:
+      forward-auth:
+        implementation: ForwardAuth
+
+log:
+  level: info
+
+identity_validation:
+  reset_password:
+    jwt_secret: local-development-reset-password-secret-change-before-production
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+    password:
+      algorithm: argon2
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: auth.nma.test
+      policy: bypass
+    - domain:
+        - music.nma.test
+        - tidarr.nma.test
+        - adder.nma.test
+      policy: one_factor
+
+session:
+  secret: local-development-session-secret-change-before-production
+  cookies:
+    - domain: nma.test
+      authelia_url: https://auth.nma.test:8443
+      default_redirection_url: https://adder.nma.test:8443
+      name: nma_local_session
+      same_site: lax
+      inactivity: 30m
+      expiration: 8h
+      remember_me: 1M
+
+regulation:
+  max_retries: 5
+  find_time: 2m
+  ban_time: 5m
+
+storage:
+  encryption_key: local-development-storage-key-change-before-production
+  local:
+    path: /data/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /data/notification.txt

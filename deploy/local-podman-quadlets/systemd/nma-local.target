@@ -1,0 +1,15 @@
+[Unit]
+Description=Navidrome Music Adder local development stack
+Wants=nma-local-traefik.service
+Wants=nma-local-authelia.service
+Wants=nma-local-navidrome.service
+Wants=nma-local-tidarr.service
+Wants=nma-local-adder.service
+After=nma-local-traefik.service
+After=nma-local-authelia.service
+After=nma-local-navidrome.service
+After=nma-local-tidarr.service
+After=nma-local-adder.service
+
+[Install]
+WantedBy=default.target

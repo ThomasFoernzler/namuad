@@ -1,0 +1,77 @@
+tls:
+  certificates:
+    - certFile: /certs/dev.crt
+      keyFile: /certs/dev.key
+
+http:
+  middlewares:
+    drop-auth-headers:
+      headers:
+        customRequestHeaders:
+          Remote-User: ""
+          Remote-Groups: ""
+          Remote-Email: ""
+          Remote-Name: ""
+
+    authelia:
+      forwardAuth:
+        address: http://authelia:9091/api/authz/forward-auth
+        trustForwardHeader: true
+        maxResponseBodySize: 8192
+        authResponseHeaders:
+          - Remote-User
+          - Remote-Groups
+          - Remote-Email
+          - Remote-Name
+
+    authenticated:
+      chain:
+        middlewares:
+          - drop-auth-headers
+          - authelia
+
+  routers:
+    authelia:
+      rule: Host(`auth.nma.test`)
+      entryPoints: [websecure]
+      service: authelia
+      tls: {}
+
+    navidrome:
+      rule: Host(`music.nma.test`)
+      entryPoints: [websecure]
+      middlewares: [authenticated]
+      service: navidrome
+      tls: {}
+
+    tidarr:
+      rule: Host(`tidarr.nma.test`)
+      entryPoints: [websecure]
+      middlewares: [authenticated]
+      service: tidarr
+      tls: {}
+
+    music-adder:
+      rule: Host(`adder.nma.test`)
+      entryPoints: [websecure]
+      middlewares: [authenticated]
+      service: music-adder
+      tls: {}
+
+  services:
+    authelia:
+      loadBalancer:
+        servers:
+          - url: http://authelia:9091
+    navidrome:
+      loadBalancer:
+        servers:
+          - url: http://navidrome:4533
+    tidarr:
+      loadBalancer:
+        servers:
+          - url: http://tidarr:8484
+    music-adder:
+      loadBalancer:
+        servers:
+          - url: http://music-adder:8080

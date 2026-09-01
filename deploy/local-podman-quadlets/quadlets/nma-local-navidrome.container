@@ -1,0 +1,27 @@
+[Unit]
+Description=NMA local Navidrome
+After=nma-local-network.service
+Wants=nma-local-network.service
+PartOf=nma-local.target
+
+[Service]
+Restart=on-failure
+
+[Container]
+ContainerName=nma-local-navidrome
+Image=docker.io/deluan/navidrome:latest
+Network=nma-local.network
+NetworkAlias=navidrome
+IP=10.89.91.4
+User=1000:1000
+Volume=%h/programming/navidrome-music-adder/.local-dev/navidrome/data:/data:Z,U
+Volume=%h/programming/navidrome-music-adder/.local-dev/music:/music:ro,z
+Environment=TZ=Europe/Berlin
+Environment=ND_LOGLEVEL=info
+Environment=ND_SCANSCHEDULE=5s
+Environment=ND_EXTAUTH_USERHEADER=Remote-User
+Environment=ND_EXTAUTH_TRUSTEDSOURCES=10.89.91.2/32,10.89.91.6/32
+Environment=ND_ENABLEUSEREDITING=false
+
+[Install]
+WantedBy=default.target

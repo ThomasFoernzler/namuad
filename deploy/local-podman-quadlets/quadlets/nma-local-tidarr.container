@@ -1,0 +1,24 @@
+[Unit]
+Description=NMA local Tidarr music downloader
+After=nma-local-network.service
+Wants=nma-local-network.service
+PartOf=nma-local.target
+
+[Service]
+Restart=on-failure
+
+[Container]
+ContainerName=nma-local-tidarr
+Image=docker.io/cstaelen/tidarr:latest
+Network=nma-local.network
+NetworkAlias=tidarr
+IP=10.89.91.5
+Volume=%h/programming/navidrome-music-adder/.local-dev/tidarr/shared:/shared:z
+Volume=%h/programming/navidrome-music-adder/.local-dev/music:/music:rw,z
+Environment=TZ=Europe/Berlin
+Environment=UMASK=0022
+Environment=ENABLE_BEETS=false
+Environment=ENABLE_HISTORY=true
+
+[Install]
+WantedBy=default.target

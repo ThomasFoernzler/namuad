@@ -1,0 +1,23 @@
+[Unit]
+Description=NMA local Traefik
+After=nma-local-network.service
+Wants=nma-local-network.service
+PartOf=nma-local.target
+
+[Service]
+Restart=on-failure
+
+[Container]
+ContainerName=nma-local-traefik
+Image=docker.io/library/traefik:v3
+Network=nma-local.network
+NetworkAlias=traefik
+IP=10.89.91.2
+PublishPort=127.0.0.1:8080:8080
+PublishPort=127.0.0.1:8443:8443
+Volume=%h/programming/navidrome-music-adder/deploy/local/traefik/static.yml:/etc/traefik/traefik.yml:ro,Z
+Volume=%h/programming/navidrome-music-adder/deploy/local/traefik/dynamic.yml:/etc/traefik/dynamic/config.yml:ro,Z
+Volume=%h/programming/navidrome-music-adder/.local-dev/certs:/certs:ro,Z
+
+[Install]
+WantedBy=default.target

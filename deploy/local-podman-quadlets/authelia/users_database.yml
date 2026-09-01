@@ -1,0 +1,9 @@
+users:
+  music-test:
+    disabled: false
+    displayname: Music Test
+    password: "$argon2id$v=19$m=65536,t=3,p=4$bm1hLWxvY2FsLXRlc3Qtc2FsdA$2J0RCNznMCHOpUHY4wBKxGCcesWCto6nxEECtbSpBkc"
+    email: music-test@nma.test
+    groups:
+      - users
+      - admins

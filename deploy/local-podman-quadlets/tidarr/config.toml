@@ -1,0 +1,23 @@
+enable_cache = true
+debug = false
+
+[download]
+track_quality = "high"
+skip_existing = true
+threads_count = 2
+download_path = "/music"
+
+[metadata]
+enable = true
+embed_lyrics = false
+cover = true
+
+[cover]
+save = false
+
+[templates]
+default = "{item.isrc}"
+track = "{item.isrc}"
+album = "{item.isrc}"
+playlist = "{item.isrc}"
+mix = "{item.isrc}"
