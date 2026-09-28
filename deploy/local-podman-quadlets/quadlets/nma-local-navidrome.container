@@ -14,8 +14,8 @@ Network=nma-local.network
 NetworkAlias=navidrome
 IP=10.89.91.4
 User=1000:1000
-Volume=%h/programming/navidrome-music-adder/.local-dev/navidrome/data:/data:Z,U
-Volume=%h/programming/navidrome-music-adder/.local-dev/music:/music:ro,z
+Volume=@PROJECT_DIR@/.local-dev/navidrome/data:/data:Z,U
+Volume=@PROJECT_DIR@/.local-dev/music:/music:ro,z
 Environment=TZ=Europe/Berlin
 Environment=ND_LOGLEVEL=info
 Environment=ND_SCANSCHEDULE=5s

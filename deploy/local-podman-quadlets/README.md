@@ -1,6 +1,6 @@
 # Complete local test stack
 
-This stack runs Traefik, Authelia, Navidrome, Tidarr, and Navidrome Music Adder
+This stack runs Traefik, Authelia, Navidrome, Tidarr, and NAMUAD
 as rootless Podman Quadlets. Traefik is configured exclusively through the
 dynamic file provider.
 
@@ -19,7 +19,7 @@ secrets in this stack are development-only.
 Run from the repository root:
 
 ```bash
-deploy/local/setup.sh
+deploy/local-podman-quadlets/setup.sh
 systemctl --user start nma-local.target
 ```
 
@@ -58,8 +58,10 @@ container itself is rootless, that identity maps to the host user running the
 Quadlet rather than host root. It can therefore write the host-user-owned local
 music directory without a recursive `:U` chown.
 
-Finally, complete the music-adder's separate TIDAL login through its admin API.
-Both logins may use the same TIDAL account, but they store separate OAuth tokens.
+Finally, open the music-adder's **TIDAL account** page, start its separate login,
+and paste the final TIDAL redirect URL into the form. Both logins may use the
+same TIDAL account, but they store separate OAuth tokens.
+
 The adder's encrypted OAuth session JSON is kept in the
 `nma-local-adder-state` named volume. Its import queue and completed-job history
 are kept in memory and cleared whenever the adder restarts.

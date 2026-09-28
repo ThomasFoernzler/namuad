@@ -13,8 +13,8 @@ Image=docker.io/cstaelen/tidarr:latest
 Network=nma-local.network
 NetworkAlias=tidarr
 IP=10.89.91.5
-Volume=%h/programming/navidrome-music-adder/.local-dev/tidarr/shared:/shared:z
-Volume=%h/programming/navidrome-music-adder/.local-dev/music:/music:rw,z
+Volume=@PROJECT_DIR@/.local-dev/tidarr/shared:/shared:z
+Volume=@PROJECT_DIR@/.local-dev/music:/music:rw,z
 Environment=TZ=Europe/Berlin
 Environment=UMASK=0022
 Environment=ENABLE_BEETS=false

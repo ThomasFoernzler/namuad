@@ -36,7 +36,7 @@ mkcert \
   '*.nma.test'
 
 if [[ ! -f "$state_dir/tidarr/shared/.tiddl/config.toml" ]]; then
-  cp "$project_dir/deploy/local/tidarr/config.toml" \
+  cp "$project_dir/deploy/local-podman-quadlets/tidarr/config.toml" \
     "$state_dir/tidarr/shared/.tiddl/config.toml"
 fi
 
@@ -46,7 +46,8 @@ if [[ ! -f "$state_dir/adder/app.env" ]]; then
   sed \
     -e "s|@SESSION_SECRET@|$session_secret|" \
     -e "s|@FERNET_KEY@|$fernet_key|" \
-    "$project_dir/deploy/local/app.env.template" > "$state_dir/adder/app.env"
+    "$project_dir/deploy/local-podman-quadlets/app.env.template" \
+    > "$state_dir/adder/app.env"
   chmod 600 "$state_dir/adder/app.env"
 fi
 
@@ -60,8 +61,14 @@ if ! grep -q '^NMA_TIDAL_SESSION_FILE=' "$state_dir/adder/app.env"; then
     >> "$state_dir/adder/app.env"
 fi
 
-install -m 0644 "$project_dir"/deploy/local/quadlets/* "$quadlet_dir/"
-install -m 0644 "$project_dir/deploy/local/systemd/nma-local.target" "$user_unit_dir/"
+for source in "$project_dir"/deploy/local-podman-quadlets/quadlets/*; do
+  target="$quadlet_dir/$(basename "$source")"
+  sed "s|@PROJECT_DIR@|$project_dir|g" "$source" > "$target"
+  chmod 0644 "$target"
+done
+install -m 0644 \
+  "$project_dir/deploy/local-podman-quadlets/systemd/nma-local.target" \
+  "$user_unit_dir/"
 systemctl --user daemon-reload
 
 echo

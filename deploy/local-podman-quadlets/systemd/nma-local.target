@@ -1,5 +1,5 @@
 [Unit]
-Description=Navidrome Music Adder local development stack
+Description=NAMUAD local development stack
 Wants=nma-local-traefik.service
 Wants=nma-local-authelia.service
 Wants=nma-local-navidrome.service

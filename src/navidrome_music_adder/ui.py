@@ -118,7 +118,7 @@ def page_identity(
 def render_header(username: str, *, show_tidal: bool) -> None:
     with ui.header().classes("items-center px-6"):
         ui.icon("library_music").classes("text-2xl")
-        ui.label("Navidrome Music Adder").classes("text-xl font-semibold")
+        ui.label("NAMUAD").classes("text-xl font-semibold")
         ui.space()
         ui.button("Imports", icon="home", on_click=lambda: ui.navigate.to("/")).props("flat")
         if show_tidal:
@@ -177,7 +177,7 @@ def install_ui(
         rendered_signature: tuple | None = None
         playlists_loaded = False
 
-        ui.page_title("Navidrome Music Adder")
+        ui.page_title("NAMUAD")
         ui.dark_mode().enable()
         ui.colors(primary="#7c3aed", secondary="#06b6d4", accent="#f59e0b")
         render_header(username, show_tidal=is_admin)
@@ -534,7 +534,7 @@ def install_ui(
             )
 
         username = str(identity["preferred_username"])
-        ui.page_title("TIDAL account · Navidrome Music Adder")
+        ui.page_title("TIDAL account · NAMUAD")
         ui.dark_mode().enable()
         ui.colors(primary="#7c3aed", secondary="#06b6d4", accent="#f59e0b")
         render_header(username, show_tidal=True)
@@ -614,6 +614,6 @@ def install_ui(
     ui.run_with(
         app,
         storage_secret=settings.secret_key.get_secret_value(),
-        title="Navidrome Music Adder",
+        title="NAMUAD",
         favicon="🎵",
     )

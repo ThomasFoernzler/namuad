@@ -146,7 +146,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             await tidarr.close()
             await navidrome.close()
 
-    app = FastAPI(title="Navidrome Music Adder", version="0.1.0", lifespan=lifespan)
+    app = FastAPI(title="NAMUAD", version="0.1.0", lifespan=lifespan)
     app.add_middleware(
         SessionMiddleware,
         secret_key=settings.secret_key.get_secret_value(),

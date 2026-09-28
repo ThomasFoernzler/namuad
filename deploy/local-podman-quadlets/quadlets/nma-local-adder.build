@@ -1,4 +1,4 @@
 [Build]
-ImageTag=localhost/navidrome-music-adder:dev
-SetWorkingDirectory=%h/programming/navidrome-music-adder
-File=%h/programming/navidrome-music-adder/Dockerfile
+ImageTag=localhost/namuad:dev
+SetWorkingDirectory=@PROJECT_DIR@
+File=@PROJECT_DIR@/Dockerfile

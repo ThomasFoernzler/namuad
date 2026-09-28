@@ -3,7 +3,7 @@ requires = ["setuptools>=80"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "navidrome-music-adder"
+name = "namuad"
 version = "0.1.0"
 description = "Import TIDAL playlist snapshots through Tidarr into per-user Navidrome playlists"
 readme = "README.md"
@@ -33,7 +33,7 @@ dev = [
 ]
 
 [project.scripts]
-navidrome-music-adder = "navidrome_music_adder.main:main"
+namuad = "navidrome_music_adder.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

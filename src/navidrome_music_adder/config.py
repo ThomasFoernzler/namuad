@@ -32,7 +32,7 @@ class Settings(BaseSettings):
 
     navidrome_url: str = "http://navidrome:4533"
     navidrome_user_header: str = "Remote-User"
-    navidrome_client_name: str = "navidrome-music-adder"
+    navidrome_client_name: str = "namuad"
     navidrome_page_size: int = 500
 
     tidarr_url: str = "http://tidarr:8484"

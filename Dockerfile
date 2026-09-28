@@ -12,4 +12,4 @@ WORKDIR /app
 RUN mkdir /state && chown app:app /state
 USER app
 EXPOSE 8080
-CMD ["navidrome-music-adder"]
+CMD ["namuad"]

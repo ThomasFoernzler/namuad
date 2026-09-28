@@ -13,9 +13,9 @@ Image=nma-local-adder.build
 Network=nma-local.network
 NetworkAlias=music-adder
 IP=10.89.91.6
-EnvironmentFile=%h/programming/navidrome-music-adder/.local-dev/adder/app.env
+EnvironmentFile=@PROJECT_DIR@/.local-dev/adder/app.env
 Volume=nma-local-adder-state.volume:/state:Z,U
-Volume=%h/programming/navidrome-music-adder/.local-dev/tidarr/shared:/tidarr-shared:ro,z
+Volume=@PROJECT_DIR@/.local-dev/tidarr/shared:/tidarr-shared:ro,z
 
 [Install]
 WantedBy=default.target

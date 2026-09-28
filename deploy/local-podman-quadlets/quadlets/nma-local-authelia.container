@@ -13,8 +13,8 @@ Image=docker.io/authelia/authelia:latest
 Network=nma-local.network
 NetworkAlias=authelia
 IP=10.89.91.3
-Volume=%h/programming/navidrome-music-adder/deploy/local/authelia:/config:ro,Z
-Volume=%h/programming/navidrome-music-adder/.local-dev/authelia/data:/data:Z,U
+Volume=@PROJECT_DIR@/deploy/local-podman-quadlets/authelia:/config:ro,Z
+Volume=@PROJECT_DIR@/.local-dev/authelia/data:/data:Z,U
 Environment=TZ=Europe/Berlin
 
 [Install]
