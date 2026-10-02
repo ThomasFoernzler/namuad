@@ -52,7 +52,7 @@ async def test_does_not_replace_active_item() -> None:
 
 
 @pytest.mark.asyncio
-async def test_replaces_finished_item_to_redownload_missing_file() -> None:
+async def test_does_not_replace_finished_item() -> None:
     posts = 0
 
     async def handler(request: httpx.Request) -> httpx.Response:
@@ -71,9 +71,11 @@ async def test_replaces_finished_item_to_redownload_missing_file() -> None:
     client = TidarrClient(
         Settings(tidarr_api_key=SecretStr("key")), transport=httpx.MockTransport(handler)
     )
-    await client.ensure_track_queued("42")
+    item = await client.ensure_track_queued("42")
     await client.close()
-    assert posts == 1
+    assert item is not None
+    assert item.status == "finished"
+    assert posts == 0
 
 
 @pytest.mark.asyncio

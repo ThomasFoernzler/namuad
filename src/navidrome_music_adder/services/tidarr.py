@@ -40,8 +40,8 @@ class TidarrClient:
     """Small client around Tidarr's stable automation API.
 
     Tidarr replaces an existing queue item when POST /api/save receives the same
-    ID. Callers must therefore avoid posting IDs in active states. Reposting a
-    finished ID is intentional when the corresponding library file is missing.
+    ID. Callers must therefore never post an ID that is already present, including
+    finished and failed items. Retrying a download is an explicit user action.
     """
 
     ACTIVE = {
@@ -83,9 +83,7 @@ class TidarrClient:
 
     async def ensure_track_queued(self, tidal_track_id: str) -> TidarrItem | None:
         existing = (await self.list_queue()).get(str(tidal_track_id))
-        if existing and existing.status in self.ACTIVE:
-            return existing
-        if existing and existing.status == TidarrStatus.ERROR:
+        if existing:
             return existing
 
         await self.queue_track(tidal_track_id)

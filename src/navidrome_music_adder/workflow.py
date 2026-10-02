@@ -152,6 +152,7 @@ class ImportWorkflow:
         inventory = await self.navidrome.inventory(job.username)
         files = await self.filesystem.inventory()
         queue = await self.tidarr.list_queue()
+        known_tidarr_ids = set(queue)
         if not queue_missing and not job.navidrome_playlist_id:
             existing_playlist = await self.navidrome.find_playlist_by_name(
                 job.username, job.playlist_name
@@ -176,6 +177,8 @@ class ImportWorkflow:
                 continue
 
             remote = queue.get(track.tidal_track_id)
+            if remote is not None:
+                track.tidarr_started = True
             on_disk = files.available and bool(
                 (track.isrc and track.isrc in files.isrcs)
                 or (not track.isrc and normalize_title(track.title) in files.misc_titles)
@@ -196,8 +199,19 @@ class ImportWorkflow:
                 continue
             if remote is None:
                 if queue_missing:
-                    await self.tidarr.queue_track(track.tidal_track_id)
-                    track.status = TrackStatus.QUEUED
+                    if track.tidarr_started:
+                        track.status = TrackStatus.FAILED
+                        track.error = "Tidarr queue item disappeared before completion"
+                    elif track.tidal_track_id in known_tidarr_ids:
+                        # Another occurrence of this TIDAL track in the same
+                        # playlist was submitted during this refresh.
+                        track.tidarr_started = True
+                        track.status = TrackStatus.QUEUED
+                    else:
+                        await self.tidarr.queue_track(track.tidal_track_id)
+                        known_tidarr_ids.add(track.tidal_track_id)
+                        track.tidarr_started = True
+                        track.status = TrackStatus.QUEUED
                 else:
                     track.status = TrackStatus.MISSING
             elif remote.status in TidarrClient.ACTIVE:
@@ -216,14 +230,8 @@ class ImportWorkflow:
                 if not files.available:
                     self._wait_for_navidrome_after_finished(track, datetime.now(UTC))
                     continue
-                # Tidarr replaces a same-ID finished item when it is posted again.
-                if not track.stale_requeue_attempted:
-                    track.stale_requeue_attempted = True
-                    await self.tidarr.queue_track(track.tidal_track_id)
-                    track.status = TrackStatus.QUEUED
-                else:
-                    track.status = TrackStatus.FAILED
-                    track.error = "Tidarr finished, but no ISRC file appeared in the library"
+                track.status = TrackStatus.FAILED
+                track.error = "Tidarr finished, but no matching file appeared in the library"
 
     async def advance(self, import_id: str, *, queue_missing: bool = True) -> None:
         async with self._advance_lock:

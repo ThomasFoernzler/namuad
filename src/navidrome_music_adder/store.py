@@ -25,7 +25,9 @@ class ImportTrack(BaseModel):
     navidrome_song_id: str | None = None
     error: str | None = None
     finished_seen_at: datetime | None = None
-    stale_requeue_attempted: bool = False
+    # True after NAMUAD submitted this track or observed it in Tidarr. Once set,
+    # a missing queue entry is a failure; automatic resubmission is forbidden.
+    tidarr_started: bool = False
 
 
 class ImportJob(BaseModel):
